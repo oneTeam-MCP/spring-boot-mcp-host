@@ -25,6 +25,11 @@ spring:
                 - "@modelcontextprotocol/server-filesystem"
                 - "./"
 
+        sse:
+          connections:
+            author-tools-server:
+              url: http://localhost:8081
+
 logging:
   level:
     org.springframework.ai.mcp: DEBUG
