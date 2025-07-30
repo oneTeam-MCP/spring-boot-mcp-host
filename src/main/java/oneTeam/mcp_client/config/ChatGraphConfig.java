@@ -2,7 +2,6 @@ package oneTeam.mcp_client.config;
 
 import lombok.RequiredArgsConstructor;
 import oneTeam.mcp_client.agent.ConversationState;
-import oneTeam.mcp_client.agent.node.AppendBotMessage;
 import oneTeam.mcp_client.agent.node.AppendUserMessage;
 import oneTeam.mcp_client.agent.node.CallChatModel;
 import org.bsc.langgraph4j.CompiledGraph;
@@ -24,12 +23,9 @@ public class ChatGraphConfig {
         return new StateGraph<>(ConversationState.SCHEMA, ConversationState::new)
                 .addNode("append_user", node_async(new AppendUserMessage()))
                 .addNode("call_llm", new CallChatModel(chatClient))
-                .addNode("append_bot", node_async(new AppendBotMessage()))
                 .addEdge(StateGraph.START, "append_user")
                 .addEdge("append_user", "call_llm")
-                .addEdge("call_llm", "append_bot")
-                .addEdge("append_bot", StateGraph.END)
+                .addEdge("call_llm", StateGraph.END)
                 .compile();
     }
-
 }
