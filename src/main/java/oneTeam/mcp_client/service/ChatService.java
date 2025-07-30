@@ -1,32 +1,35 @@
 package oneTeam.mcp_client.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import oneTeam.mcp_client.agent.ConversationState;
 import org.bsc.langgraph4j.CompiledGraph;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
     private final CompiledGraph<ConversationState> chatAgentExecutor;
     private final ChatClient chatClient;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private ConversationState state = new ConversationState(
             Map.of(ConversationState.HISTORY, new ArrayList<String>())
     );
 
+    /**
+     * 동기 대화.
+     * 이전 history와 질문을 그래프에 넘기고, 마지막 응답을 꺼내서 반환
+     */
     public synchronized String chat(String question) {
         // 이전 history와 새 질문을 함께 초기 입력에 넣고
         Map<String,Object> init = new HashMap<>(Map.of(
@@ -45,42 +48,34 @@ public class ChatService {
         return hist.getLast();
     }
 
-    public void stream(String question, SseEmitter emitter) {
-        // 사용자 입력 기록
-        synchronized(this) {
+    /**
+     * SSE 기반 스트리밍 대화.
+     * SseEmitter를 통해 청크가 생성될 때마다 즉시 클라이언트로 푸시
+     */
+    public void streamTo(OutputStream os, String question) {
+        synchronized (this) {
             state.history().add(question);
         }
+
         // prompt 구성
         String prompt;
-        synchronized(this) {
+        synchronized (this) {
             prompt = String.join("\n", state.history());
         }
 
-        // 비동기 작업
-        executor.submit(() -> {
+        // 청크마다 즉시 flush
+        for (String chunk : chatClient.prompt()
+                .user(prompt)
+                .stream()
+                .content()
+                .toIterable()) {
+            String sse = "data: " + chunk + "\n";
             try {
-                Flux<String> flux = chatClient.prompt()
-                        .user(prompt)
-                        .stream()
-                        .content(); // 청크 단위 텍스트
-
-                flux.subscribe(
-                        chunk -> {
-                            synchronized (this) {
-                                state.history().add(chunk);
-                            }
-                            try {
-                                emitter.send(SseEmitter.event().data(chunk));
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        },
-                        emitter::completeWithError,
-                        emitter::complete
-                );
-            } catch (Exception ex) {
-                emitter.completeWithError(ex);
+                os.write(sse.getBytes(StandardCharsets.UTF_8));
+                os.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        });
+        }
     }
 }

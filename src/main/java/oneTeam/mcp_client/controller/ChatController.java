@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.util.Map;
 
@@ -22,11 +22,10 @@ public class ChatController {
     }
 
     @PostMapping(path = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream(@RequestBody Map<String, String> req) {
+    public StreamingResponseBody stream(@RequestBody Map<String,String> req) {
         String question = req.get("question");
-        SseEmitter emitter = new SseEmitter(30_000L);
-
-        chatService.stream(question, emitter);
-        return emitter;
+        return outputStream -> {
+            chatService.streamTo(outputStream, question);
+        };
     }
 }
