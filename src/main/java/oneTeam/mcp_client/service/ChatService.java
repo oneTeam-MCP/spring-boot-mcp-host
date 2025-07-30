@@ -64,6 +64,7 @@ public class ChatService {
         }
 
         // 청크마다 즉시 flush
+        StringBuilder fullAnswer = new StringBuilder();
         for (String chunk : chatClient.prompt()
                 .user(prompt)
                 .stream()
@@ -76,6 +77,11 @@ public class ChatService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            fullAnswer.append(chunk);
+        }
+
+        synchronized (this) {
+            state.history().add(fullAnswer.toString());
         }
     }
 }
