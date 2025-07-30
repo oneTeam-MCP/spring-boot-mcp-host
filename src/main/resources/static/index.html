@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chat Stream 테스트</title>
+    <style>
+        #chat {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            width: 600px;
+            height: 300px;
+            overflow-y: auto;
+            background: #fafafa;
+        }
+        #questionInput {
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<h1>Chat Stream 테스트</h1>
+<div id="chat">여기에 AI 응답이 스트리밍으로 표시됩니다...</div>
+<input id="questionInput" type="text" placeholder="질문을 입력하세요" />
+<button id="sendBtn">전송</button>
+
+<script>
+    document.getElementById('sendBtn').addEventListener('click', () => {
+        const question = document.getElementById('questionInput').value;
+        const chatDiv = document.getElementById('chat');
+        chatDiv.textContent = '';  // 이전 내용 초기화
+
+        fetch('/chat/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question })
+        })
+            .then(response => {
+                // ReadableStream 리더 얻기
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+
+                function readChunk() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) return;
+                        // 청크를 디코딩해서 buffer에 누적
+                        buffer += decoder.decode(value, { stream: true });
+                        // "\n\n" 단위로 이벤트 분리
+                        const parts = buffer.split('\n');
+                        buffer = parts.pop(); // 마지막 조각은 아직 완전하지 않을 수 있어 재저장
+                        parts.forEach(part => {
+                            if (part.startsWith('data: ')) {
+                                const text = part.slice(6);
+                                // 화면에 추가
+                                chatDiv.textContent += text;
+                                // 스크롤 맨 아래로
+                                chatDiv.scrollTop = chatDiv.scrollHeight;
+                            }
+                        });
+                        readChunk();
+                    });
+                }
+
+                readChunk();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('스트리밍 중 에러가 발생했습니다.');
+            });
+    });
+</script>
+</body>
+</html>
