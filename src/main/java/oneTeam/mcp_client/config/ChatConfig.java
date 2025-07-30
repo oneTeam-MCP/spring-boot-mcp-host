@@ -13,7 +13,7 @@ public class ChatConfig {
     public ChatClient chatClient(ChatModel chatModel,
                                  SyncMcpToolCallbackProvider tools) {
         return ChatClient.builder(chatModel)
-                .defaultTools(tools.getToolCallbacks())
+                .defaultToolCallbacks(tools)
                 .build();
     }
 }
