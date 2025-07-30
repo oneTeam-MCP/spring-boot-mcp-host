@@ -30,13 +30,22 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// Anthropic Claude 연동
-	implementation 'org.springframework.ai:spring-ai-anthropic-spring-boot-starter:1.0.0-M6'
+	// implementation 'org.springframework.ai:spring-ai-anthropic-spring-boot-starter:1.0.0'
 	// MCP 클라이언트 스타터
-	implementation 'org.springframework.ai:spring-ai-mcp-client-spring-boot-starter:1.0.0-M6'
+	// implementation 'org.springframework.ai:spring-ai-mcp-client-spring-boot-starter:1.0.0'
+
+	// Anthropic Claude 모델 스타터
+	implementation 'org.springframework.ai:spring-ai-starter-model-anthropic:1.0.0'
+	implementation 'org.springframework.ai:spring-ai-starter-mcp-client:1.0.0'
+
+	// LangGraph
+	implementation 'org.bsc.langgraph4j:langgraph4j-core:1.6.0-rc2'
+	implementation 'org.bsc.langgraph4j:langgraph4j-langchain4j:1.6.0-rc2'
+	implementation 'org.bsc.langgraph4j:langgraph4j-spring-ai:1.6.0-rc2'
+	implementation "org.bsc.langgraph4j:langgraph4j-springai-agentexecutor:1.6.0-rc2"
 }
 
 tasks.named('test') {

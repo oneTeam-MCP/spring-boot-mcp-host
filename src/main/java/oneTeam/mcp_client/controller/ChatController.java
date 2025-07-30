@@ -12,10 +12,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final ChatService svc;
+    private final ChatService chatService;
 
     @PostMapping("/chat")
     public Map<String,String> chat(@RequestBody Map<String,String> req) {
-        return Map.of("answer", svc.chat(req.get("question")));
+        return Map.of("answer", chatService.chat(req.get("question")));
     }
 }
