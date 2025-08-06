@@ -79,6 +79,8 @@ jobs:
               "${{ secrets.DB_USERNAME }}" \
               "${{ secrets.DB_PASSWORD }}" \
               "${{ secrets.JWT_SECRET }}" \
+              "${{ secrets.ANTHROPIC_API_KEY }}" \
+              "${{ secrets.BRAVE_API_KEY }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}" \
               "${{ secrets.DOCKERHUB_USERNAME }}/oneteam-mcp:latest"
 
