@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/oneteam-mcp:latest
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/oneteam-mcp:latest
 
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@master
