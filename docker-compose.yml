@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  app:
+    image: ${DOCKERHUB_USERNAME}/oneTeam-mcp:latest
+    container_name: oneTeam-mcp
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
