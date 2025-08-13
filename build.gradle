@@ -31,11 +31,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-	// Anthropic Claude 연동
-	// implementation 'org.springframework.ai:spring-ai-anthropic-spring-boot-starter:1.0.0'
-	// MCP 클라이언트 스타터
-	// implementation 'org.springframework.ai:spring-ai-mcp-client-spring-boot-starter:1.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	// Anthropic Claude 모델 스타터
 	implementation 'org.springframework.ai:spring-ai-starter-model-anthropic:1.0.0'
