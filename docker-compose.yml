@@ -12,6 +12,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       BRAVE_API_KEY: ${BRAVE_API_KEY}
+    networks: [ proxy ]
 
   nginx:
     image: nginx:1.27-alpine
@@ -35,11 +36,12 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-www:/var/www/certbot
     entrypoint: /bin/sh
-    command: -c "while :; do sleep 12h; certbot renew --webroot -w /var/www/certbot && nginx -s reload -c /etc/nginx/nginx.conf 2>/dev/null || true; done"
+    command: -c "while :; do sleep 12h; certbot renew --webroot -w /var/www/certbot || true; done"
     networks: [ proxy ]
 
 volumes:
   certbot-etc:
   certbot-www:
+
 networks:
-  proxy:
+  proxy: {}
