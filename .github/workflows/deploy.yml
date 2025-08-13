@@ -63,8 +63,7 @@ jobs:
           source: "docker-compose.yml"
           target: "/home/ubuntu/host/"
 
-      - name: Create .env on EC2 (optional)
-        if: ${{ env.CREATE_REMOTE_ENV == 'true' }}
+      - name: Create .env on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
