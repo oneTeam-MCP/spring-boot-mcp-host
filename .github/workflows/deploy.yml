@@ -77,6 +77,7 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
             BRAVE_API_KEY=${{ secrets.BRAVE_API_KEY }}
+            SEQUENTIAL_ST_KEY=${{ secrets.SEQUENTIAL_ST_KEY }}
             DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             EOF
             chmod 600 /home/ubuntu/host/.env
