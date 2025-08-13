@@ -39,6 +39,8 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    env:
+      CREATE_REMOTE_ENV: ${{ secrets.CREATE_REMOTE_ENV }}
     steps:
       - uses: actions/checkout@v4
 
@@ -62,7 +64,7 @@ jobs:
           target: "/home/ubuntu/host/"
 
       - name: Create .env on EC2 (optional)
-        if: ${{ secrets.CREATE_REMOTE_ENV == 'true' }}
+        if: ${{ env.CREATE_REMOTE_ENV == 'true' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
