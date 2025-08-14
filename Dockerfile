@@ -1,6 +1,6 @@
 FROM eclipse-temurin:21-jre
 
-# Node.js, npm, npx 설치
+# Node, npm, npx 설치
 RUN apt-get update && apt-get install -y nodejs npm \
     && ln -sf /usr/bin/npx /usr/local/bin/npx
 
