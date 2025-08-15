@@ -9,9 +9,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
-      interval: 20s
+      start_period: 180s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 30
 
 networks:
   proxy:
