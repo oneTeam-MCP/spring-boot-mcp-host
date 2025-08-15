@@ -13,15 +13,15 @@ spring:
         stdio:
           connections:
             brave-search:
-              command: npx.cmd
+              command: npx
               args: [ "-y", "@modelcontextprotocol/server-brave-search" ]
               env:
                 BRAVE_API_KEY: ${BRAVE_API_KEY}
             filesystem:
-              command: npx.cmd
+              command: npx
               args: ["-y", "@modelcontextprotocol/server-filesystem", "./"]
             chanmcp:
-              command: npx.cmd
+              command: npx
               args: [ "-y", "@smithery/cli@latest", "run", "@hwruchan/chanmcp", "--key", "${SEQUENTIAL_ST_KEY}" ]
 
 #        sse:
