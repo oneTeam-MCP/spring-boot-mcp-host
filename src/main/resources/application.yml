@@ -12,24 +12,19 @@ spring:
         stdio:
           connections:
             brave-search:
-              command: npx
-              args:
-                - "-y"
-                - "@modelcontextprotocol/server-brave-search"
+              command: /usr/local/bin/mcp-server-brave-search
               env:
                 BRAVE_API_KEY: ${BRAVE_API_KEY}
+
             filesystem:
-              command: npx
+              command: /usr/local/bin/mcp-server-filesystem
               args:
-                - "-y"
-                - "@modelcontextprotocol/server-filesystem"
-                - "./"
+                - "./"          # 작업 루트 지정 (필요 시 절대경로로)
+
             chanmcp:
-              command: npx
+              command: /usr/local/bin/smithery
               args:
-                - "-y"
-                - "@smithery/cli@latest"
-                - "run"
+                - run
                 - "@hwruchan/chanmcp"
                 - "--key"
                 - ${SEQUENTIAL_ST_KEY}

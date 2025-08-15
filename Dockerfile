@@ -6,6 +6,12 @@ RUN apt-get update && apt-get install -y curl ca-certificates \
  && apt-get install -y nodejs \
  && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g \
+    @modelcontextprotocol/server-brave-search \
+    @modelcontextprotocol/server-filesystem \
+    @smithery/cli \
+    @hwruchan/chanmcp \
+
 WORKDIR /app
 COPY build/libs/*.jar app.jar
 EXPOSE 8080
