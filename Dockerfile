@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y curl ca-certificates \
 # npm 전역 설치 안정화에 필요한 빌드 도구
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git python3 make g++ \
-  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/lib/apt/lists/*
 
 # npm 설정
 RUN npm config set unsafe-perm true \
