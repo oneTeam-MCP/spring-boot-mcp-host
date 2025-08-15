@@ -6,11 +6,11 @@ RUN apt-get update && apt-get install -y curl ca-certificates \
  && apt-get install -y nodejs \
  && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g \
+RUN npm install -g --omit=dev --no-audit --no-fund \
     @modelcontextprotocol/server-brave-search \
     @modelcontextprotocol/server-filesystem \
     @smithery/cli \
-    @hwruchan/chanmcp \
+    @hwruchan/chanmcp
 
 WORKDIR /app
 COPY build/libs/*.jar app.jar
