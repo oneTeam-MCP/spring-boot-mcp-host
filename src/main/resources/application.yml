@@ -9,7 +9,10 @@ spring:
 
     mcp:
       client:
+        initialized: false
         request-timeout: 180s
+        toolcallback:
+          enabled: false
         stdio:
           connections:
             brave-search:
