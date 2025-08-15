@@ -9,7 +9,6 @@ spring:
 
     mcp:
       client:
-        initialized: true
         request-timeout: 180s
         stdio:
           connections:
