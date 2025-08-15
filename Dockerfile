@@ -1,8 +1,10 @@
 FROM eclipse-temurin:21-jre
 
-# Node, npm, npx 설치
-RUN apt-get update && apt-get install -y nodejs npm \
-    && ln -sf /usr/bin/npx /usr/local/bin/npx
+# Node.js LTS 설치
+RUN apt-get update && apt-get install -y curl ca-certificates \
+ && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+ && apt-get install -y nodejs \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY build/libs/*.jar app.jar
