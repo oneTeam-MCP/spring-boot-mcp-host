@@ -83,6 +83,15 @@ jobs:
             EOF
             chmod 600 /home/ubuntu/host/.env
 
+      - name: Docker login on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo '${{ secrets.DOCKERHUB_PASSWORD }}' | docker login -u '${{ secrets.DOCKERHUB_USERNAME }}' --password-stdin
+
       - name: Pull & Up
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -92,7 +101,7 @@ jobs:
           script: |
             set -e
             cd /home/ubuntu/host
-            docker compose pull || true
+            docker compose pull
             docker compose up -d --remove-orphans
             for i in {1..30}; do
               curl -fsS http://127.0.0.1:18080/actuator/health | grep -q '"status":"UP"' && ok=1 && break
