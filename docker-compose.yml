@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${DOCKERHUB_USERNAME}/oneteam-mcp:latest
+    image: ${DOCKERHUB_USERNAME}/oneteam-mcp:${IMAGE_TAG}
     container_name: host-app
     env_file: ./.env
     environment:
