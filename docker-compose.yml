@@ -3,6 +3,12 @@ services:
     image: ${DOCKERHUB_USERNAME}/oneteam-mcp:latest
     container_name: host-app
     env_file: ./.env
+    environment:
+      - SPRING_AI_MCP_CLIENT_INITIALIZED=true
+      - SPRING_AI_MCP_CLIENT_TOOLCALLBACK_ENABLED=false
+      - SPRING_MAIN_LAZY_INITIALIZATION=true
+      - SEQUENTIAL_ST_KEY=${SEQUENTIAL_ST_KEY}
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
     ports:
       - "127.0.0.1:18080:8080"
     networks: [ proxy ]

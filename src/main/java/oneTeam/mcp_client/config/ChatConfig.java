@@ -10,30 +10,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
 public class ChatConfig {
 
-    /** 최초 호출 시에만 MCP 클라이언트들을 initialize() */
+    /** 최초 1회만 툴 콜백을 적재하고 캐싱 */
     @Bean
-    public ToolCallbackProvider lazyMcpToolProvider(List<McpSyncClient> clients) {
-        AtomicBoolean inited = new AtomicBoolean(false);
+    public ToolCallbackProvider mcpToolProvider(List<McpSyncClient> clients) {
         SyncMcpToolCallbackProvider delegate = new SyncMcpToolCallbackProvider(clients);
+        final AtomicReference<ToolCallback[]> cache = new AtomicReference<>();
 
         return () -> {
-            if (inited.compareAndSet(false, true)) {
-                clients.forEach(McpSyncClient::initialize);
-            }
-            return delegate.getToolCallbacks();
+            ToolCallback[] cached = cache.get();
+            if (cached != null) return cached;
+
+            ToolCallback[] loaded = delegate.getToolCallbacks();
+            if (loaded == null) loaded = new ToolCallback[0];
+            cache.compareAndSet(null, loaded);
+            return cache.get();
         };
     }
 
     @Bean
-    public ChatClient chatClient(ChatModel chatModel,
-                                 ToolCallbackProvider lazyMcpToolProvider) {
+    public ChatClient chatClient(ChatModel chatModel, ToolCallbackProvider mcpToolProvider) {
         return ChatClient.builder(chatModel)
-                .defaultToolCallbacks(lazyMcpToolProvider)
+                .defaultToolCallbacks(mcpToolProvider)
                 .build();
     }
 }
