@@ -101,8 +101,8 @@ jobs:
           script: |
             set -e
             cd /home/ubuntu/host
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose pull app
+            docker compose up -d --remove-orphans --force-recreate app
             for i in {1..30}; do
               curl -fsS http://127.0.0.1:18080/actuator/health | grep -q '"status":"UP"' && ok=1 && break
               sleep 3
