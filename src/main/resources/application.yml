@@ -9,7 +9,7 @@ spring:
 
     mcp:
       client:
-        initialized: false
+        initialized: true
         request-timeout: 180s
         toolcallback:
           enabled: false
