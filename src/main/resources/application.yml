@@ -10,7 +10,7 @@ spring:
     mcp:
       client:
         initialized: true
-        request-timeout: -1
+        request-timeout: 360s
         toolcallback:
           enabled: false
         stdio:
