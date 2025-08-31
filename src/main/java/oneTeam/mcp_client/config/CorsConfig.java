@@ -11,8 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:3000",
-                        "https://oneteam-mcp.site",
-                        "https://www.oneteam-mcp.site"
+                        "https://*.oneteam-mcp.site"
                 )
                 .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
                 .allowedHeaders("*")
