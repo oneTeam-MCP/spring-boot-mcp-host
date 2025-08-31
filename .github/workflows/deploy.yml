@@ -72,7 +72,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cat > /home/ubuntu/host/.env << EOF
+            cat > /home/ubuntu/host/.env << 'EOF'
             DB_URL=${{ secrets.DB_URL }}
             DB_USERNAME=${{ secrets.DB_USERNAME }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
@@ -83,7 +83,7 @@ jobs:
             DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             IMAGE_TAG=${{ github.sha }}
             EOF
-            chmod 600 /home/ubuntu/host/.env
+            sed -i 's/\r$//' /home/ubuntu/host/.env
 
       - name: Docker login on EC2
         uses: appleboy/ssh-action@v1.0.3
