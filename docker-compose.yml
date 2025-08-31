@@ -9,6 +9,8 @@ services:
       - SPRING_MAIN_LAZY_INITIALIZATION=true
       - SEQUENTIAL_ST_KEY=${SEQUENTIAL_ST_KEY}
       - BRAVE_API_KEY=${BRAVE_API_KEY}
+      - NODE_OPTIONS=--dns-result-order=ipv4first
+      - NO_PROXY=server.smithery.ai,api.anthropic.com
     ports:
       - "18080:8080"
     networks: [ proxy ]
