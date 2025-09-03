@@ -37,6 +37,9 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-starter-model-anthropic:1.0.0'
 	implementation 'org.springframework.ai:spring-ai-starter-mcp-client:1.0.0'
 
+	// OpenAI
+	implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.1")
+
 	// LangGraph
 	implementation 'org.bsc.langgraph4j:langgraph4j-core:1.6.0-rc2'
 	implementation 'org.bsc.langgraph4j:langgraph4j-langchain4j:1.6.0-rc2'
