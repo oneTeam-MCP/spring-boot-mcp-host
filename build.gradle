@@ -34,11 +34,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	// Anthropic Claude 모델 스타터
-	implementation 'org.springframework.ai:spring-ai-starter-model-anthropic:1.0.0'
-	implementation 'org.springframework.ai:spring-ai-starter-mcp-client:1.0.0'
+	// implementation 'org.springframework.ai:spring-ai-starter-model-anthropic:1.0.0'
 
-	// OpenAI
+	// OpenAI 전용
 	implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.1")
+
+	// MCP Client (MCP를 계속 쓰실 거라면 유지)
+	implementation('org.springframework.ai:spring-ai-starter-mcp-client:1.0.0') {
+		exclude group: 'org.springframework.cloud', module: 'spring-cloud-function-context'
+	}
 
 	// LangGraph
 	implementation 'org.bsc.langgraph4j:langgraph4j-core:1.6.0-rc2'
