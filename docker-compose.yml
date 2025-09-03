@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${DOCKERHUB_USERNAME}/oneteam-mcp:${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/oneteam-mcp:latest
     container_name: host-app
     env_file: ./.env
     environment:
@@ -8,6 +8,7 @@ services:
       - SPRING_AI_MCP_CLIENT_TOOLCALLBACK_ENABLED=false
       - SPRING_MAIN_LAZY_INITIALIZATION=true
       - SEQUENTIAL_ST_KEY=${SEQUENTIAL_ST_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - BRAVE_API_KEY=${BRAVE_API_KEY}
       - NODE_OPTIONS=--dns-result-order=ipv4first
       - NO_PROXY=server.smithery.ai,api.anthropic.com
