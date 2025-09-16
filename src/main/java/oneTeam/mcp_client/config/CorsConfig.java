@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "http://localhost:3000",
+                        "http://localhost:5173",
                         "https://oneteam-mcp.site",
                         "https://*.oneteam-mcp.site"
                 )
