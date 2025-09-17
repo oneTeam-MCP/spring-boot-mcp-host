@@ -6,7 +6,7 @@ spring:
       api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: gpt-5
+          model: gpt-5-chat
           #model: claude-3-7-sonnet-20250219
           #model: claude-3-haiku-20240307
 
