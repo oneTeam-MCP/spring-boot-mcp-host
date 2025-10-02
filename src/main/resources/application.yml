@@ -31,4 +31,4 @@ spring:
 logging:
   level:
     org.springframework.ai.mcp: DEBUG
-    io: WARN
+    #io: WARN
