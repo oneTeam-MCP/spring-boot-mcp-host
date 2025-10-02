@@ -27,6 +27,8 @@ public class McpHealthManager {
      */
     @Scheduled(fixedRate = 30000, initialDelay = 10000)
     public void keepAlive() {
+        log.info("=== Keep-Alive 시작 ===");
+
         Map<String, McpSyncClient> clients =
                 applicationContext.getBeansOfType(McpSyncClient.class);
 
@@ -37,10 +39,10 @@ public class McpHealthManager {
             try {
                 client.listTools();
                 lastSuccessTime.put(beanName, LocalDateTime.now());
-                log.debug("MCP keep-alive OK: {}", beanName);
+                log.info("MCP keep-alive OK: {}", beanName);
 
             } catch (Exception e) {
-                log.warn("MCP keep-alive failed for {}: {}", beanName, e.getMessage());
+                log.error("MCP keep-alive failed for {}: {}", beanName, e.getMessage());
 
                 // 마지막 성공 이후 2분 이상 실패면 재시작
                 LocalDateTime lastSuccess = lastSuccessTime.get(beanName);
