@@ -32,6 +32,9 @@ public class McpHealthManager {
         Map<String, McpSyncClient> clients =
                 applicationContext.getBeansOfType(McpSyncClient.class);
 
+        log.info("찾은 클라이언트 수: {}", clients.size());
+        log.info("클라이언트 목록: {}", clients.keySet());
+
         for (Map.Entry<String, McpSyncClient> entry : clients.entrySet()) {
             String beanName = entry.getKey();
             McpSyncClient client = entry.getValue();
