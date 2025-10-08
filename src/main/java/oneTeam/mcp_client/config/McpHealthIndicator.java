@@ -15,13 +15,16 @@ public class McpHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        if (healthManager.isAllHealthy()) {
+        boolean isHealthy = healthManager.isAllHealthy();
+
+        if (isHealthy) {
             return Health.up()
-                    .withDetail("mcp", "모든 클라이언트 정상")
+                    .withDetail("mcp-clients", "모든 클라이언트 정상")
                     .build();
         } else {
             return Health.down()
-                    .withDetail("mcp", "일부 클라이언트 장애")
+                    .withDetail("mcp-clients", "일부 클라이언트 장애")
+                    .withDetail("details", healthManager.getHealthDetails())
                     .build();
         }
     }
