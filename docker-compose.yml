@@ -5,7 +5,7 @@ services:
     env_file: ./.env
     environment:
       - SPRING_AI_MCP_CLIENT_INITIALIZED=true
-      - SPRING_AI_MCP_CLIENT_TOOLCALLBACK_ENABLED=false
+      - SPRING_AI_MCP_CLIENT_TOOLCALLBACK_ENABLED=true
       - SPRING_MAIN_LAZY_INITIALIZATION=true
       - SEQUENTIAL_ST_KEY=${SEQUENTIAL_ST_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -18,10 +18,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
-      start_period: 180s
-      interval: 10s
-      timeout: 5s
-      retries: 30
+      start_period: 60s
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   proxy:

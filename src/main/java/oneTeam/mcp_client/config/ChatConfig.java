@@ -1,6 +1,7 @@
 package oneTeam.mcp_client.config;
 
 import io.modelcontextprotocol.client.McpSyncClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
@@ -12,28 +13,55 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
 @Configuration
 public class ChatConfig {
 
-    /** 최초 1회만 툴 콜백을 적재하고 캐싱 */
+    private final AtomicReference<ToolCallback[]> toolCache = new AtomicReference<>();
+
     @Bean
     public ToolCallbackProvider mcpToolProvider(List<McpSyncClient> clients) {
-        SyncMcpToolCallbackProvider delegate = new SyncMcpToolCallbackProvider(clients);
-        final AtomicReference<ToolCallback[]> cache = new AtomicReference<>();
+        // 초기 로딩
+        loadTools(clients);
 
+        // 동적 갱신 지원
         return () -> {
-            ToolCallback[] cached = cache.get();
-            if (cached != null) return cached;
-
-            ToolCallback[] loaded = delegate.getToolCallbacks();
-            if (loaded == null) loaded = new ToolCallback[0];
-            cache.compareAndSet(null, loaded);
-            return cache.get();
+            ToolCallback[] cached = toolCache.get();
+            if (cached != null) {
+                return cached;
+            }
+            return loadTools(clients);
         };
     }
 
+
+    private ToolCallback[] loadTools(List<McpSyncClient> clients) {
+        try {
+            if (clients == null || clients.isEmpty()) {
+                log.warn("사용 가능한 MCP 클라이언트 없음");
+                return new ToolCallback[0];
+            }
+
+            SyncMcpToolCallbackProvider provider = new SyncMcpToolCallbackProvider(clients);
+            ToolCallback[] tools = provider.getToolCallbacks();
+
+            if (tools == null) {
+                tools = new ToolCallback[0];
+            }
+
+            toolCache.set(tools);
+            log.info("MCP 툴 {}개 로드 완료", tools.length);
+            return tools;
+
+        } catch (Exception e) {
+            log.error("MCP 툴 로드 실패", e);
+            return new ToolCallback[0];
+        }
+    }
+
     @Bean
-    public ChatClient chatClient(ChatModel chatModel, ToolCallbackProvider mcpToolProvider) {
+    public ChatClient chatClient(ChatModel chatModel,
+                                 ToolCallbackProvider mcpToolProvider) {
         return ChatClient.builder(chatModel)
                 .defaultToolCallbacks(mcpToolProvider)
                 .build();

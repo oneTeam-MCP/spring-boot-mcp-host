@@ -32,3 +32,14 @@ logging:
   level:
     org.springframework.ai.mcp: DEBUG
     #io: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
