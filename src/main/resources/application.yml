@@ -25,7 +25,8 @@ spring:
                 BRAVE_API_KEY: ${BRAVE_API_KEY}
             chanmcp:
               command: npx
-              args: [ "-y", "@smithery/cli@latest", "run", "@hwruchan/chanmcp", "--key", "${SEQUENTIAL_ST_KEY}" ]
+              args: [ "-y", "@smithery/cli@latest", "run", "@hwruchan/chanmcp", "--key", "${SEQUENTIAL_ST_KEY}", "--profile", "inevitable-swift-GNi79n" ]
+
 
 
 logging:
