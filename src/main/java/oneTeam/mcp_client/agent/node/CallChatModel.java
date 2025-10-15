@@ -13,10 +13,10 @@ public class CallChatModel implements AsyncNodeAction<ConversationState> {
 
     @Override
     public CompletableFuture<Map<String,Object>> apply(ConversationState state) {
-        String prompt = String.join("\n", state.history());
+        String latestUserMessage = state.history().isEmpty() ? "" : state.history().getLast();
         return CompletableFuture.supplyAsync(() -> {
             String aiContent = client.prompt()
-                    .user(prompt)
+                    .user(latestUserMessage)
                     .call()
                     .content();
 
